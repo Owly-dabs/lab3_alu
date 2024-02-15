@@ -1,0 +1,19 @@
+module full_adder (
+	input a, 
+	input b,
+	input ci,
+	output s,
+	output co
+  )
+{ 
+  sig i, j, k; // connector
+  always {
+  
+  i = a ^ b;
+  s = i ^ ci;
+  j = a & b;
+  k = i & ci;
+  co = j | k;
+    
+  }
+}

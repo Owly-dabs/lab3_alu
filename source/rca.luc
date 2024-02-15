@@ -1,0 +1,26 @@
+// rca.luc
+module rca (
+    input a[32],
+    input b[32],
+    input ci,
+    output s[32]
+  ) {
+  full_adder fa[32];
+  var i;
+
+  always {
+
+    // set the inputs to the first unit (LSB) of the RCA 
+    fa.a[0] = a[0];
+    fa.b[0] = b[0];
+    fa.ci[0] = ci;
+    
+    for (i=1; i<32; i++){ // define the connections for the other 31 units of fa 
+      fa.a[i] = a[i];
+      fa.b[i] = b[i];
+      fa.ci[i] = fa.co[i-1];
+    }
+      
+    s = fa.s; // connect the output bits
+  }
+}

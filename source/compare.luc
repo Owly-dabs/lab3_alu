@@ -1,0 +1,13 @@
+module compare (
+    input z,
+    input v,
+    input n,
+    input alufn_signal[6],
+    output cmp
+  ) {
+
+  always {
+    // default values to silence errors 
+    cmp = 0;
+  }
+}

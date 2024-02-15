@@ -1,0 +1,36 @@
+module adder (
+    input a[32],
+    input b[32],
+    input alufn_signal[6],
+    output out[32],
+    output z,
+    output v,
+    output n
+  ) {
+rca r;
+var i;
+var zout;
+var xb[32];
+  
+  always {
+    // default values to silence errors 
+    
+    for (i=0; i<32; i++){ // define the connections for the other 31 units of fa 
+      xb[i] = alufn_signal[0] ^ b[i];
+    } 
+    r.a = a;
+    r.b = xb;
+    r.ci = alufn_signal[0];
+    
+    out = r.s;
+    
+    zout = r.s[0];
+    for (i=1;i<32;i++) {
+      zout = r.s[i] | zout;
+    }
+    z = ~zout;
+    
+    v = (a[31]&xb[31]&~r.s[31]) | (~a[31]&~xb[31]&r.s[31]);
+    n = r.s[31];
+  }
+}

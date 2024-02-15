@@ -1,0 +1,12 @@
+module shifter (
+    input a[32],
+    input b[5],
+    input alufn_signal[6],
+    output shift[32]
+  ) {
+
+  always {
+    // default values to silence errors 
+    shift = 0;
+  }
+}

@@ -1,0 +1,12 @@
+module boolean (
+    input a[32],
+    input b[32],
+    input alufn_signal[6],
+    output bool[32]
+  ) {
+
+  always {
+    // default values to silence errors 
+    bool = 0;
+  }
+}
