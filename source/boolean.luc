@@ -1,12 +1,22 @@
-module boolean (
-    input a[32],
-    input b[32],
-    input alufn_signal[6],
-    output bool[32]
-  ) {
+// Assume mux_4 has been implemented with selectors named s0 and s1, 4-bit input named in, and 1-bit output named out.
 
-  always {
-    // default values to silence errors 
-    bool = 0;
-  }
+module boolean (
+	input a[32],
+	input b[32],
+	input alufn_signal[6],
+	output bool[32]
+) {
+	// Create giant mux:
+	mux_4 mux_4_32[32];
+
+	always {
+		// Initialise output of this boolean unit as fallback:
+		bool = 0;
+		// Set giant mux's selectors and inputs:
+		mux_4_32.s0 = a;
+		mux_4_32.s1 = b;
+		mux_4_32.in = 32x{{alufn_signal[3:0]}};
+		// Set output of this boolean unit to output of giant mux:
+		bool = mux_4_32.out;
+	}
 }
