@@ -7,7 +7,7 @@ module boolean (
 	output bool[32]
 ) {
 	// Create giant mux:
-	mux_4 mux_4_32[32];
+	muxfour mux_4_32[32];
 
 	always {
 		// Initialise output of this boolean unit as fallback:
