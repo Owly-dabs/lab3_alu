@@ -1,22 +1,27 @@
 module compare (
+    input alufn[6],           //defining inputs and outputs of module
+    input v,
+    input z,
     input n,
-    input vee,
-    input zee,
-    input alufn2,
-    input alufn1,
-    output out
+    output cmp1[32]
   ) {
-  sig i,j,k,l;
-  muxfour mux4;
+  
+  sig cmp;
   
   always {
-    i = 0;
-    j = zee;
-    k = n ^ vee;
-    l = k | zee;
-    mux4.s0 = alufn1;
-    mux4.s1 = alufn2;
-    mux4.in = c{i,j,k,l};
-    out = mux4.out;
+    
+    case(alufn[2:1]){
+      b01:                    //if alufn[2:1] == 01, compare a=b
+        cmp = z;
+      b10:                    //if alufn[2:1] == 10, compare a<b
+        cmp = n^v;            
+      b11:
+        cmp = z|(n^v);        //if alufn[2:1] == 11, compare a<=b
+      default:
+        cmp = b0;
+    }
+    
+    cmp1[31:1] = 31b0;        //first 15 bits of output are 0
+    cmp1[0] = cmp;
   }
 }
