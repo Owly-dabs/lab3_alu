@@ -1,0 +1,73 @@
+module thirtyTwo_Bit_Left_Shifter (
+    input num[32],  
+    input encoding[5],  
+    output out[32]
+  ) {
+  sig a[32];
+  sig b[32];
+  sig c[32];
+  sig d[32];
+  
+  always {
+  
+    case (encoding[4]) {
+      b0:
+        a = num;
+        
+      b1: 
+        a[31:16] = num[15:0];
+        a[15:0] = 16b0;
+        
+      default:
+        a = num;
+    }
+    
+    case (encoding[3]) {
+      b0:
+        b = a;
+        
+      b1: 
+        b[31:8] = a[23:0];
+        b[7:0] = 8b0;
+        
+      default:
+        b = a;
+    }
+    
+    case (encoding[2]) {
+      b0:
+        c = b;
+        
+      b1: 
+        c[31:4] = b[27:0];
+        c[3:0] = 4b0;
+        
+      default:
+        c = b;
+    }
+    
+    case (encoding[1]) {
+      b0:
+        d = c;
+        
+      b1: 
+        d[31:2] = c[29:0];
+        d[1:0] = 2b0;
+        
+      default:
+        d = c;
+    }
+    
+    case (encoding[0]) {
+      b0:
+        out = d;
+        
+      b1: 
+        out[31:1] = d[30:0];
+        out[0] = b0;
+        
+      default:
+        out = d;
+    }
+  }
+}
