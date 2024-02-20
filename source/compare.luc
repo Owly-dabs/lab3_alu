@@ -1,13 +1,22 @@
 module compare (
-    input z,
-    input v,
     input n,
-    input alufn_signal[6],
-    output cmp
+    input vee,
+    input zee,
+    input alufn2,
+    input alufn1,
+    output out
   ) {
-
+  sig i,j,k,l;
+  muxfour mux4;
+  
   always {
-    // default values to silence errors 
-    cmp = 0;
+    i = 0;
+    j = zee;
+    k = n ^ vee;
+    l = k | zee;
+    mux4.s0 = alufn1;
+    mux4.s1 = alufn2;
+    mux4.in = c{i,j,k,l};
+    out = mux4.out;
   }
 }
