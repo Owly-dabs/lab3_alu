@@ -21,7 +21,7 @@ module compare (
         cmp = b0;
     }
     
-    cmp1[31:1] = 31b0;        //first 15 bits of output are 0
+    cmp1[31:1] = 31b0;        //first 31 bits of output are 0
     cmp1[0] = cmp;
   }
 }
