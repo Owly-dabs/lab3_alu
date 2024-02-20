@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="alu-starter" board="Alchitry Au" language="Lucid" version="3">
   <files>
-    <component>button_conditioner.luc</component>
+    <src>muxfour.luc</src>
     <component>pipeline.luc</component>
-    <component>reset_conditioner.luc</component>
-    <src>adder.luc</src>
-    <src top="true">au_top.luc</src>
-    <component>edge_detector.luc</component>
-    <src>shifter.luc</src>
-    <src>multiplier.luc</src>
-    <component>decoder.luc</component>
+    <src>xbitreverse.luc</src>
+    <component>counter.luc</component>
     <src>alu.luc</src>
-    <src>compare.luc</src>
-    <src>rca.luc</src>
     <src>full_adder.luc</src>
     <src>boolean.luc</src>
-    <component>counter.luc</component>
+    <src>mux_2.luc</src>
+    <component>decoder.luc</component>
+    <src>adder.luc</src>
+    <src>rca.luc</src>
+    <src>shifter.luc</src>
+    <src>x_bit_left_shifter.luc</src>
+    <src>multiplier.luc</src>
+    <src>compare.luc</src>
+    <component>reset_conditioner.luc</component>
+    <src top="true">au_top.luc</src>
+    <src>shl.luc</src>
+    <component>edge_detector.luc</component>
+    <component>button_conditioner.luc</component>
+    <src>mshl32bit.luc</src>
     <constraint lib="true">alchitry.acf</constraint>
     <constraint lib="true">io.acf</constraint>
     <constraint lib="true">au.xdc</constraint>

@@ -1,14 +1,14 @@
 module mshl32bit (
         input a[32],
-        input B[5],
+        input b[5],
         output shl[32]
     ) {
     
-    x_bit_left_shifter s16l (#SHIFT(16), .shift(B[4]));
-    x_bit_left_shifter s8l (#SHIFT(8), .shift(B[3]));
-    x_bit_left_shifter s4l (#SHIFT(4), .shift(B[2]));
-    x_bit_left_shifter s2l (#SHIFT(2), .shift(B[1]));
-    x_bit_left_shifter s1l (#SHIFT(1), .b(B[0])); 
+    x_bit_left_shifter s16l (#SHIFT(16), .shift(b[4]));
+    x_bit_left_shifter s8l (#SHIFT(8), .shift(b[3]));
+    x_bit_left_shifter s4l (#SHIFT(4), .shift(b[2]));
+    x_bit_left_shifter s2l (#SHIFT(2), .shift(b[1]));
+    x_bit_left_shifter s1l (#SHIFT(1), .shift(b[0])); 
     
     always{
         s16l.a = a;
