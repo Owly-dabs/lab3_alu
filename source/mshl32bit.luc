@@ -1,0 +1,21 @@
+module mshl32bit (
+        input a[32],
+        input B[5],
+        output shl[32]
+    ) {
+    
+    x_bit_left_shifter s16l (#SHIFT(16), .shift(B[4]));
+    x_bit_left_shifter s8l (#SHIFT(8), .shift(B[3]));
+    x_bit_left_shifter s4l (#SHIFT(4), .shift(B[2]));
+    x_bit_left_shifter s2l (#SHIFT(2), .shift(B[1]));
+    x_bit_left_shifter s1l (#SHIFT(1), .b(B[0])); 
+    
+    always{
+        s16l.a = a;
+        s8l.a = s16l.out;
+        s4l.a = s8l.out;
+        s2l.a = s4l.out;
+        s1l.a = s2l.out;
+        shl = s1l.out;
+    }
+}
