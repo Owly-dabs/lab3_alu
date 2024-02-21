@@ -15,23 +15,23 @@ module alu (
   
   always {
     // default values to silence errors 
-    z = 0;
-    v = 0;
-    n = 0;
-    out = 0;
-    adder.a = 0;
-    adder.b = 0;
-    adder.alufn_signal = 0;
-    boolean.a = 0;
-    boolean.b = 0;
-    boolean.alufn_signal = 0;
-    shifter.a = 0;
-    shifter.b = 0;
-    shifter.alufn_signal = 0;
+    z = adder.z;
+    v = adder.v;
+    n = adder.n;
+    out = adder.out;
+    adder.a = a;
+    adder.b = b;
+    adder.alufn_signal = alufn_signal;
+    boolean.a = a;
+    boolean.b = b;
+    boolean.alufn_signal = alufn_signal;
+    shifter.a = a;
+    shifter.b = b;
+    shifter.alufn_signal = alufn_signal;
     compare.z = 0;
     compare.v = 0;
     compare.n = 0;
-    compare.alufn_signal = 0;
+    compare.alufn_signal = alufn_signal;
     multiplier.a = 0;
     multiplier.b = 0;
     
