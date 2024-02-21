@@ -1,6 +1,6 @@
 module shifter (
     input a[32],
-    input b[5],
+    input b[32],
     input alufn_signal[6],
     output shift[32]
   ) {
@@ -23,7 +23,7 @@ module shifter (
     rev32pre.a[31] = sra_mux_0.out;
     rev32pre.a[30:0] = a[30:0];
     
-    shl32.b = b;    
+    shl32.b = b[4:0];    
     shl32.a = rev32pre.out;
 
     rev32post.a = shl32.shl;
