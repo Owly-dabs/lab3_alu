@@ -10,7 +10,6 @@ module x_bit_left_shifter #(
   
   mux_2 muxes[32];
   var i;
-   
   // module declarations
   // declare your mux_2 (32 of them)
   // other useful variables, e.g: shifted_bits[32] 
@@ -18,14 +17,15 @@ module x_bit_left_shifter #(
   always {
     muxes.s0 = shift;
     for(i=0;i<32;i++){
-      muxes.in[i][0] = a[i];
-      if(i>=SHIFT){
-          muxes.in[i][1] = a[i-SHIFT];
+        muxes.in[i][0] = a[i];
+        if(i>=SHIFT){
+          muxes.in[i][1] = a[i-SHIFT];  
         }
-      else{
-          muxes.in[i][1] = b0;
+        else{
+          muxes.in[i][1] = b0; 
         }
-      }
+    }
+    
     out[31:0] = muxes.out[31:0]; 
     // for(i=0;i<5;i++){
     //   muxes[i].s0 = shift[i];  

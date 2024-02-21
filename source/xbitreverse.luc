@@ -1,5 +1,5 @@
-module xbitreverse #(NBITS=32:NBITS>1 & NBITS<=32)(
-    input a[NBITS],  // clock
+module xbitreverse #(NBITS=32 : NBITS>1 ) (
+    input a[NBITS],
     input rev,
     output out[NBITS]
   ) {
@@ -8,10 +8,9 @@ module xbitreverse #(NBITS=32:NBITS>1 & NBITS<=32)(
   always {
     muxes.s0 = rev;
     for(n=0;n<NBITS;n++){
-      muxes.in[n][0] = a[n];
-      muxes.in[NBITS-n][1] = a[n];  
-  }
-    
+        muxes.in[n][0] = a[n];
+        muxes.in[NBITS-n][1] = a[n];
+      }
     out = muxes.out;
-  }
+    }
 }

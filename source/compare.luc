@@ -1,5 +1,5 @@
 module compare (
-    input alufn[6],           //defining inputs and outputs of module
+    input alufn_signal[6],           //defining inputs and outputs of module
     input v,
     input z,
     input n,
@@ -10,7 +10,7 @@ module compare (
   
   always {
     
-    case(alufn[2:1]){
+    case(alufn_signal[2:1]){
       b01:                    //if alufn[2:1] == 01, compare a=b
         cmp = z;
       b10:                    //if alufn[2:1] == 10, compare a<b
