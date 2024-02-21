@@ -7,35 +7,41 @@ module alu (
     output v,
     output n
   ) {
-  adder adder;
-  boolean boolean;
-  shifter shifter;
-  compare compare; 
-  multiplier multiplier;
+  .a(a),.b(b){
+      .alufn_signal(alufn_signal){
+      adder adder;
+      boolean boolean;
+      shifter shifter;
+    }
+      multiplier multiplier;
+  }
+ .z(adder.z),.v(adder.v),.n(adder.n){
+  compare compare(.alufn_signal(alufn_signal));
+  }
+
+  //ALU MUXES
+
+  muxfour mux_boolshiftc[32](.s1(alufn_signal[5]), .s0(alufn_signal[4]));
+  mux_2 mux_alufn1[32]( .s0(alufn_signal[1]));
+  var i;
+
   
   always {
-    // default values to silence errors 
+  // default values to silence errors
+    for(i=1;i<32;i++){
+      mux_alufn1.in[i][0] = adder.s[i];
+      mux_alufn1.in[i][1] = multiplier.mul[i];
+      
+      
+      mux_boolshiftc.in[i][3] = compare.cmp1[i];
+      mux_boolshiftc.in[i][2] = shifter.shift[i];
+      mux_boolshiftc.in[i][1] = boolean.bool[i];
+      mux_boolshiftc.in[i][0] = mux_alufn1.out[i];
+      
+      }
+    out = mux_boolshiftc.out;
     z = adder.z;
     v = adder.v;
     n = adder.n;
-    out = adder.out;
-    adder.a = a;
-    adder.b = b;
-    adder.alufn_signal = alufn_signal;
-    boolean.a = a;
-    boolean.b = b;
-    boolean.alufn_signal = alufn_signal;
-    shifter.a = a;
-    shifter.b = b;
-    shifter.alufn_signal = alufn_signal;
-    compare.z = 0;
-    compare.v = 0;
-    compare.n = 0;
-    compare.alufn_signal = alufn_signal;
-    multiplier.a = 0;
-    multiplier.b = 0;
-    
-    // YOUR ANSWER HERE 
-    
   }
 }

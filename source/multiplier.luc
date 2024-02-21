@@ -1,11 +1,12 @@
+//TODO TODO
+
 module multiplier (
     input a[32],
     input b[32],
     output mul[32]
   ) {
-
-  always {
-    // default values to silence errors 
-    mul = 0;
+  //Disabling Warnings/Errors
+  always{  
+    mul = a^b; //This is only here to disable WARNINGS
   }
 }

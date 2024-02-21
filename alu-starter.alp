@@ -16,6 +16,7 @@
     <src>x_bit_left_shifter.luc</src>
     <src>multiplier.luc</src>
     <src>compare.luc</src>
+    <src>multibank.luc</src>
     <component>reset_conditioner.luc</component>
     <src top="true">au_top.luc</src>
     <src>shl.luc</src>
