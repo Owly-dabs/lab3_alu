@@ -14,7 +14,7 @@ module shifter (
     sra_mux_0.in[1] = 0;
     
     sra_mux_1.in[0] = rev32post.out[31];
-    sra_mux_1.in[1] = 0;
+    sra_mux_1.in[1] = a[31];
     
     
     rev32pre.rev = alufn_signal[0];
@@ -29,9 +29,6 @@ module shifter (
     rev32post.a = shl32.shl;
 
     shift[31] = sra_mux_1.out;
-    shift[30:0] = rev32post.out[30:0];
-    
-    // default values to silence errors 
-    shift = 0;
+    shift[30:0] = rev32post.out[30:0];    
   }
 }
