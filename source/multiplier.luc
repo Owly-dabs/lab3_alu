@@ -1,12 +1,46 @@
-//TODO TODO
-
 module multiplier (
     input a[32],
     input b[32],
     output mul[32]
   ) {
-  //Disabling Warnings/Errors
-  always{  
-    mul = a^b; //This is only here to disable WARNINGS
-  }
+var i,j;
+var previous_row_fa_index;
+var current_row_fa_index;
+full_adder fa[496];
+
+  always {
+    mul[0] = a[0] & b[0];
+    
+    // add row 0 and row 1 as fa.s[0] till fa.s[30]
+    for (i=0;i<31;i++){
+      fa.a[i] = a[i] & b[1]; //row 1
+      fa.b[i] = a[i+1] & b[0]; //row 0
+      if (i==0) {
+        fa.ci[i]=b0;
+        }
+      else {
+        fa.ci[i] = fa.co[i-1];
+        }
+      }
+    mul[1] = fa.s[0];
+    
+    previous_row_fa_index = 0;
+    current_row_fa_index = 31;
+    
+    for (i=2;i<32;i++) {
+      for (j=0;j<32-i;j++) {
+        fa.a[current_row_fa_index+j] = a[j]&b[i];
+        fa.b[current_row_fa_index+j] = fa.s[previous_row_fa_index+j+1];
+        if (j==0){
+          fa.ci[current_row_fa_index+j]=b0;
+          }
+        else{
+          fa.ci[current_row_fa_index+j]=fa.co[current_row_fa_index+j-1];
+          }
+        }
+      previous_row_fa_index = current_row_fa_index;
+      current_row_fa_index = current_row_fa_index+j;
+      mul[i] = fa.s[previous_row_fa_index];
+      }
+    }
 }
