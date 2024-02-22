@@ -10,7 +10,7 @@ module adder (
 rca r;
 var i;
 var zout;
-var xb[32];
+sig xb[32];
   
   always {
     // default values to silence errors 
