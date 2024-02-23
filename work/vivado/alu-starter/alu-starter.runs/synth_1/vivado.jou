@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Fri Feb 23 07:11:54 2024
+# Process ID: 15200
+# Current directory: C:/Users/owly/Documents/SUTD_classes/lab3_alu/work/vivado/alu-starter/alu-starter.runs/synth_1
+# Command line: vivado.exe -log au_top_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source au_top_0.tcl
+# Log file: C:/Users/owly/Documents/SUTD_classes/lab3_alu/work/vivado/alu-starter/alu-starter.runs/synth_1/au_top_0.vds
+# Journal file: C:/Users/owly/Documents/SUTD_classes/lab3_alu/work/vivado/alu-starter/alu-starter.runs/synth_1\vivado.jou
+# Running On: DESKTOP-U46VS5R, OS: Windows, CPU Frequency: 3294 MHz, CPU Physical cores: 16, Host memory: 16354 MB
+#-----------------------------------------------------------
+source au_top_0.tcl -notrace
