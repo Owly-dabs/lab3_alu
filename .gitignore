@@ -1,0 +1,7 @@
+*
+!.gitignore
+!*.luc
+!*.alp
+!LICENSE
+!README.md
+!*/
