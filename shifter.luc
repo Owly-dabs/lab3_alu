@@ -1,0 +1,16 @@
+module shifter (
+    input numA[32],         // 32 bit integer to be right or left shifted
+    input numB[5],          // 5 bit integer to represent the amount to be shifted
+    input leftRight,        // single bit to represent right or left shift. Left: 0, Right: 1 (ALUFN[0])
+    input signRight,        // single bit to represent SRA                                    (ALUFN[1])
+    output out[32]             // 32 bit integer shifted right or left
+  ) {
+  leftShifter ls;
+  rightShifter rs;
+  
+  always {
+    ls.s = signRight; ls.numA = numA; ls.numB = numB;
+    rs.s = signRight; rs.numA = numA; rs.numB = numB;
+    out = leftRight == b0 ? ls.out:rs.out;
+  }
+}
