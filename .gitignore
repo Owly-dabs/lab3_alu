@@ -1,0 +1,9 @@
+*
+work/
+cores/
+!.gitignore
+!*.luc
+!*.alp
+!LICENSE
+!README.md
+!*/

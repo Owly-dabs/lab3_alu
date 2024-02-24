@@ -1,34 +1,20 @@
 module shifter (
-    input a[32],
-    input b[32],
+    input a[32],         // 32 bit integer to be right or left shifted
+    input b[32],          // 5 bit integer to represent the amount to be shifted
+    /*input leftRight,        // single bit to represent right or left shift. Left: 0, Right: 1 (ALUFN[0])
+    input signRight,        // single bit to represent SRA                                      (ALUFN[1])*/
     input alufn_signal[6],
-    output shift[32]
+    output shift[32]          // 32 bit integer shifted right or left
   ) {
-  mshl32bit shl32;
-  xbitreverse rev32pre(#NBITS(32));
-  xbitreverse rev32post(#NBITS(32));
-  mux_2 sra_mux_0(.s0(alufn_signal[1]));
-  mux_2 sra_mux_1(.s0(alufn_signal[1]));
+  leftShifter ls;
+  rightShifter rs;
+  
   always {
-    sra_mux_0.in[0] = a[31];
-    sra_mux_0.in[1] = 0;
-    
-    sra_mux_1.in[0] = rev32post.out[31];
-    sra_mux_1.in[1] = a[31];
-    
-    
-    rev32pre.rev = alufn_signal[0];
-    rev32post.rev = alufn_signal[0];
-    
-    rev32pre.a[31] = sra_mux_0.out;
-    rev32pre.a[30:0] = a[30:0];
-    
-    shl32.b = b[4:0];    
-    shl32.a = rev32pre.out;
-
-    rev32post.a = shl32.shl;
-
-    shift[31] = sra_mux_1.out;
-    shift[30:0] = rev32post.out[30:0];    
+    /*ls.s = signRight; ls.numA = numA; ls.numB = numB;
+    rs.s = signRight; rs.numA = numA; rs.numB = numB;
+    out = leftRight == b0 ? ls.out:rs.out;*/
+    ls.s = alufn_signal[1]; ls.numA = a; ls.numB = b[4:0];
+    rs.s = alufn_signal[1]; rs.numA = a; rs.numB = b[4:0];
+    shift = alufn_signal[0] == b0 ? ls.out:rs.out;
   }
 }
