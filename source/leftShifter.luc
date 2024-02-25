@@ -18,7 +18,7 @@ module leftShifter (
       b1: 
         a[31:16] = numA[15:0];
         //a[15:0] = 16b0;
-        a[15:0] = s & a[31] == b1 ? b1111111111111111 : 16b0;
+        a[15:0] = s == b0 ? 16b0:16b1111111111111111;
         
       default:
         a = numA;
@@ -31,7 +31,7 @@ module leftShifter (
       b1: 
         b[31:8] = a[23:0];
         //b[7:0] = 8b0;
-        b[7:0] = s & a[31] == b1 ? b11111111 : 8b0;
+        b[7:0] = s == b0 ? 8b0:8b11111111;
         
       default:
         b = a;
@@ -44,7 +44,7 @@ module leftShifter (
       b1: 
         c[31:4] = b[27:0];
         //c[3:0] = 4b0;
-        c[3:0] = s & a[31] == b1 ? b1111 : 4b0;
+        c[3:0] = s == b0 ? 4b0:4b1111;
         
       default:
         c = b;
@@ -57,7 +57,7 @@ module leftShifter (
       b1: 
         d[31:2] = c[29:0];
         //d[1:0] = 2b0;
-        d[1:0] = s & a[31] == b1 ? b11:2b0;
+        d[1:0] = s == b0 ? 2b0:2b11;
         
       default:
         d = c;
@@ -70,7 +70,7 @@ module leftShifter (
       b1: 
         out[31:1] = d[30:0];
         //out[0] = b0;
-        out[0] = s & a[31] == b1 ? b1 : b0;
+        out[0] = s;
         
       default:
         out = d;

@@ -16,7 +16,7 @@ module rightShifter (
     
     ls.numA = reversed;
     ls.numB = numB;
-    ls.s = s;
+    ls.s = s&numA[31];
     reversed = ls.out;
     
     for (i=0; i<16; i++){
