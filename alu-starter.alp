@@ -2,28 +2,32 @@
 <project name="alu-starter" board="Alchitry Au" language="Lucid" version="3">
   <files>
     <src>alu.luc</src>
-    <src>rightShifter.luc</src>
-    <src>muxfour.luc</src>
-    <component>pipeline.luc</component>
-    <component>counter.luc</component>
-    <src>leftShifter.luc</src>
-    <src>x_bit_left_shifter.luc</src>
-    <src>boolean.luc</src>
-    <component>decoder.luc</component>
     <src>shifter.luc</src>
-    <src top="true">au_top.luc</src>
-    <src>rca.luc</src>
-    <src>shl.luc</src>
-    <src>multiplier.luc</src>
-    <src>xbitreverse.luc</src>
-    <src>mux_2.luc</src>
-    <src>full_adder.luc</src>
     <src>mshl32bit.luc</src>
     <src>compare.luc</src>
+    <component>pipeline.luc</component>
+    <component>counter.luc</component>
+    <src top="true">au_top.luc</src>
+    <src>x_bit_left_shifter.luc</src>
+    <src>mux_2.luc</src>
+    <src>xbitreverse.luc</src>
+    <src>shl.luc</src>
+    <src>full_adder.luc</src>
+    <src>seven_seg.luc</src>
+    <src>multiplier.luc</src>
     <component>reset_conditioner.luc</component>
-    <component>edge_detector.luc</component>
-    <src>adder.luc</src>
+    <src>boolean.luc</src>
     <component>button_conditioner.luc</component>
+    <src>run_display.luc</src>
+    <src>leftShifter.luc</src>
+    <src>adder.luc</src>
+    <src>muxfour.luc</src>
+    <component>decoder.luc</component>
+    <src>rca.luc</src>
+    <src>multi_seven_seg.luc</src>
+    <src>rightShifter.luc</src>
+    <src>divider.luc</src>
+    <component>edge_detector.luc</component>
     <constraint lib="true">alchitry.acf</constraint>
     <constraint lib="true">io.acf</constraint>
     <constraint lib="true">au.xdc</constraint>

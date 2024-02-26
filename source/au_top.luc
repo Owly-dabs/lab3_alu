@@ -18,17 +18,22 @@ module au_top (
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
-    dff a[32](.rst(rst));
-    dff b[32](.rst(rst));
-    dff alufn[6](.rst(rst));
+    .rst(rst){
+      dff a[32];
+      dff b[32];
+      dff alufn[6];
+      multi_seven_seg seg;
+    }
     //button_conditioner button_conditioner[3];
     button_conditioner button_conditioner[5];
     edge_detector edge_detector[2](#RISE(1), #FALL(0));
   }
+  run_display r_disp;
   
   always {
     reset_cond.in = ~rst_n;   // input raw inverted reset signal
     rst = reset_cond.out;     // conditioned reset
+    
     button_conditioner.in = io_button[4:0];
     edge_detector.in = button_conditioner.out[4:3];
     
@@ -36,13 +41,15 @@ module au_top (
     
     usb_tx = usb_rx;          // loop serial port
     
-    io_seg = 8b0; // connect segments to the driver
-    io_sel = 4b0110; // turn on rightmost digit, and leftmost digit
+    seg.values = {5b0,5b0,5b0,5b0};
+    
+    io_seg = ~seg.seg;      // connect segments to the driver
+    io_sel = ~seg.sel;      // connect digit select to the driver    
     
     alu.a = a.q;
     alu.b = b.q;
     alu.alufn_signal = alufn.q;
-
+    r_disp.alufn = alufn.q;
     
     // ****** INPUT SETTING ****** //
     // a very crude way of testing the alu manually
@@ -66,6 +73,57 @@ module au_top (
       alufn.d = io_dip[0][5:0];
     }
 
+    case (alu_runner.q){
+        alu_runner.SET_A_16:
+          //io_sel = 4b0111;
+          seg.values = {5b01010,5b11101,5b00001,5b00110};
+          if (edge_detector.out[1]){
+            a.d = c{a.q[31:16], io_dip[1], io_dip[0]};
+            alu_runner.d = alu_runner.SET_A_32;
+          }
+          
+        alu_runner.SET_A_32:
+          //io_sel = 4b1011;
+          seg.values = {5b01010,5b11101,5b00011,5b00010};
+          if (edge_detector.out[1]){
+            a.d = c{io_dip[1], io_dip[0], a.q[15:0]};
+          alu_runner.d = alu_runner.SET_B_16;
+          }
+          
+        alu_runner.SET_B_16: 
+          //io_sel = 4b1101;
+          seg.values = {5b01011,5b11101,5b00001,5b00110};
+          if (edge_detector.out[1]){
+            b.d = c{b.q[31:16], io_dip[1], io_dip[0]};
+          alu_runner.d = alu_runner.SET_B_32;
+          }
+          
+        alu_runner.SET_B_32:
+          //io_sel = 4b1110;
+          seg.values = {5b01011,5b11101,5b00011,5b00010};
+          if (edge_detector.out[1]){
+            b.d = c{io_dip[1], io_dip[0], b.q[15:0]};
+          alu_runner.d = alu_runner.SET_ALUFN;
+          }
+          
+        alu_runner.SET_ALUFN:
+          //io_sel = 4b0110;
+          seg.values = {5b01010,5b10001,5b01111,5b10101};
+          if(edge_detector.out[1]){
+            alufn.d = io_dip[0][5:0];
+          alu_runner.d = alu_runner.RUN;
+          }
+          
+        alu_runner.RUN:
+          //io_sel = 4b1001;
+          r_disp.alufn = alufn.q;
+          seg.values = r_disp.seg_val;
+          if(edge_detector.out[0]){
+            // set A again 
+            alu_runner.d = alu_runner.SET_A_16;
+          }
+          
+      }
     // ****** OUTPUT SETTING ****** //
     // TODO: change this to suit your needs
     // io_led[0] shows the lowest 8 bit of ALU output at all times
