@@ -1,0 +1,44 @@
+module seven_seg (
+    input char[5],
+    output segs[8]  
+    ) {
+  
+   always {
+    case (char) {      
+      // Digits (1 to 1 with encoding)
+      0: segs = 8b00111111; 1: segs = 8b00000110;      
+      2: segs = 8b01011011; 3: segs = 8b01001111;      
+      4: segs = 8b01100110; 5: segs = 8b01101101;      
+      6: segs = 8b01111101; 7: segs = 8b00000111;      
+      8: segs = 8b01111111; 9: segs = 8b01100111;
+      
+      // Alphabets
+      10: segs = 8b01110111; // A
+      11: segs = 8b01111100; // b
+      12: segs = 8b00111001; // C
+      13: segs = 8b01011110; // d
+      14: segs = 8b01111001; // E
+      15: segs = 8b01110001; // F
+      16: segs = 8b01110110; // H
+      17: segs = 8b00111000; // L
+      18: segs = 8b01010000; // r
+      19: segs = 8b01101101; // S
+      20: segs = 8b00111110; // U
+      21: segs = 8b01010100; // n
+      22: segs = 8b01110011; // p
+      30: segs = 8b01101111; // g
+      
+      // Punctuation and Operators
+      23: segs = 8b10000000; // .
+      24: segs = 8b01001000; // =
+      25: segs = 8b01000011; // >
+      26: segs = 8b01001011; // >=
+      27: segs = 8b01100001; // <
+      28: segs = 8b01101001; // <=
+      29: segs = 8b01000000; // -
+      
+      
+      default: segs = 8b00000000;
+    }  }
+}
+
