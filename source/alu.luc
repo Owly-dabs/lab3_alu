@@ -1,7 +1,10 @@
 module alu (
+    input clk,
+    input rst,
     input a[32],
     input b[32],
     input alufn_signal[6],
+    input next,
     output out[32],
     output z,
     output v,
@@ -12,6 +15,7 @@ module alu (
       adder adder;
       boolean boolean;
       shifter shifter;
+      rando_num_gen rng( .clk(clk), .rst(rst), .next(next));
     }
       multiplier multiplier;
   }
@@ -23,18 +27,23 @@ module alu (
 
   muxfour mux_boolshiftc[32](.s1(alufn_signal[5]), .s0(alufn_signal[4]));
   mux_2 mux_alufn1[32]( .s0(alufn_signal[1]));
+  mux_2 mux_alufn2[32]( .s0(alufn_signal[2])); 
   var i;
 
   
   always {
-  // default values to silence errors
+ 
     for(i=1;i<32;i++){
+      // mux to select adder or or multiplier 
       mux_alufn1.in[i][0] = adder.s[i];
       mux_alufn1.in[i][1] = multiplier.mul[i];
       
+      // mux to select RNG or shifter
+      mux_alufn2.in[i][0] = shifter.shift[i];
+      mux_alufn2.in[i][1] = rng.out[i];
       
       mux_boolshiftc.in[i][3] = compare.cmp1[i];
-      mux_boolshiftc.in[i][2] = shifter.shift[i];
+      mux_boolshiftc.in[i][2] = mux_alufn2.out[i];
       mux_boolshiftc.in[i][1] = boolean.bool[i];
       mux_boolshiftc.in[i][0] = mux_alufn1.out[i];
       

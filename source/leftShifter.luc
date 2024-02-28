@@ -1,0 +1,74 @@
+module leftShifter (
+    input numA[32],  // 32 bit integer to be left shifted
+    input numB[5],   // 5 bit integer to represent the amount to be shifted
+    input s,         // 1 bit integer to represent if signed shift
+    output out[32]   // 32 bit left shifted integer
+  ) {
+  sig a[32];
+  sig b[32];
+  sig c[32];
+  sig d[32];
+  
+  always {
+  
+    case (numB[4]) {
+      b0:
+        a = numA;
+        
+      b1: 
+        a[31:16] = numA[15:0];
+        a[15:0] = s == b0 ? 16b0:16b1111111111111111; // Ternery operators serves as a mux 2:1
+        
+      default:
+        a = numA;
+    }
+    
+    case (numB[3]) {
+      b0:
+        b = a;
+        
+      b1: 
+        b[31:8] = a[23:0];
+        b[7:0] = s == b0 ? 8b0:8b11111111;
+        
+      default:
+        b = a;
+    }
+    
+    case (numB[2]) {
+      b0:
+        c = b;
+        
+      b1: 
+        c[31:4] = b[27:0];
+        c[3:0] = s == b0 ? 4b0:4b1111;
+        
+      default:
+        c = b;
+    }
+    
+    case (numB[1]) {
+      b0:
+        d = c;
+        
+      b1: 
+        d[31:2] = c[29:0];
+        d[1:0] = s == b0 ? 2b0:2b11;
+        
+      default:
+        d = c;
+    }
+    
+    case (numB[0]) {
+      b0:
+        out = d;
+        
+      b1: 
+        out[31:1] = d[30:0];
+        out[0] = s;
+        
+      default:
+        out = d;
+    }
+  }
+}

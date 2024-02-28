@@ -1,0 +1,32 @@
+module rightShifter (
+    input numA[32],  // 32 bit integer to be shifted
+    input numB[5],   // 5 bit integer to represent the amount to be shifted
+    input s,         // 1 bit to represent whether signed or unsigned shift
+    output out[32]   // 32 bit right shifted integer
+  ) {
+  var i;
+  sig reversed[32]; 
+  leftShifter ls;
+  
+  // reverse bits 
+  always {
+    for (i =0 ; i < 32;  i++) {
+      reversed[i] = numA[31-i];
+    }
+    
+    ls.numA = reversed;
+    ls.numB = numB;
+    ls.s = s&numA[31]; // bitwise and performed to correctly shift signed ints
+    reversed = ls.out;
+    
+    // different bit reversing technique to save on auxillary space
+    for (i=0; i<16; i++){ 
+      reversed[i] = reversed[31-i] ^ reversed[i];
+      reversed[31-i] = reversed[31-i] ^ reversed[i];
+      reversed[i] = reversed[31-i] ^ reversed[i];
+      
+    }
+    out = reversed;
+    
+  }
+}

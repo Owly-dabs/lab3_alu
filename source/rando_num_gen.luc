@@ -1,0 +1,23 @@
+module rando_num_gen (
+    input clk,  // clock
+    input rst,  // reset
+    input b[32],   // output length
+    input a[32],    // seed
+    input alufn_signal[6],
+    input next,
+    output out[32]
+  ) {
+.clk(clk),.rst(rst){
+  pn_gen rng;
+    }
+  shifter shifter; // Shifter to shift bits to shift bits so that output length is obeyed
+
+  always {
+    rng.seed = a;
+    rng.next = next;
+    shifter.a = rng.num;
+    shifter.b = c{27b0,b11111-b[4:0]+1}; 
+    shifter.alufn_signal = alufn_signal;
+    out = shifter.shift;
+  }
+}

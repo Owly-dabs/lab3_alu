@@ -7,13 +7,12 @@ module adder (
     output v,
     output n
   ) {
-rca r;
-var i;
+rca r;     // instantiate ripple carry adder
+var i;     
 var zout;
 sig xb[32];
   
   always {
-    // default values to silence errors 
     
     for (i=0; i<32; i++){ // define the connections for the other 31 units of fa 
       xb[i] = alufn_signal[0] ^ b[i];

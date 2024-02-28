@@ -12,41 +12,45 @@ module au_top (
   ) {
   
   sig rst;                  // reset signal
-  alu alu;
-
+  fsm alu_runner(.clk(clk), .rst(rst)) = {SET_A_16, SET_A_32, SET_B_16, SET_B_32, SET_ALUFN, RUN};
   .clk(clk) {
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
-    dff a[32](.rst(rst));
-    dff b[32](.rst(rst));
-    dff alufn[6](.rst(rst));
-    button_conditioner button_conditioner[3];
+    .rst(rst){
+      dff a[32];
+      dff b[32];
+      dff alufn[6];
+      multi_seven_seg seg;
+      alu alu;
+    }
+    button_conditioner button_conditioner[5];
+    edge_detector edge_detector[2](#RISE(1), #FALL(0));
   }
+  run_display r_disp;
   
   always {
     reset_cond.in = ~rst_n;   // input raw inverted reset signal
     rst = reset_cond.out;     // conditioned reset
-    button_conditioner.in = io_button[2:0];
+    
+    button_conditioner.in = io_button[4:0];
+    edge_detector.in = button_conditioner.out[4:3];
     
     led = c{3b0, io_button};  // connect buttons to LEDs to see which button is pressed
     
     usb_tx = usb_rx;          // loop serial port
     
-    io_seg = 8b0; // connect segments to the driver
-    io_sel = 4b0110; // turn on rightmost digit, and leftmost digit
+    seg.values = {5b0,5b0,5b0,5b0};
+    
+    io_seg = ~seg.seg;      // connect segments to the driver
+    io_sel = ~seg.sel;      // connect digit select to the driver    
     
     alu.a = a.q;
     alu.b = b.q;
     alu.alufn_signal = alufn.q;
+    r_disp.alufn = alufn.q;
+    alu.next = 0;
     
-    // ****** INPUT SETTING ****** //
-    // a very crude way of testing the alu manually
-    // TODO: change this to suit your needs
-    // press button[0] to store 'a' value based on current dipswitches 
-    // press button[1] to store 'b' value based on current dipswitches 
-    // bit[24:17] of a,b always set to 0 for convenience 
-    // press button[2] to store 'alufn' value based on io_dip[0][5:0] (6 rightmost dipswitch) 
     if (button_conditioner.out[0]){
        // store a 
        a.d = c{io_dip[2], 8b0, io_dip[1], io_dip[0]}; // set io_dip[2] to dictate MSB 8 bits
@@ -62,11 +66,54 @@ module au_top (
       alufn.d = io_dip[0][5:0];
     }
 
-    // ****** OUTPUT SETTING ****** //
-    // TODO: change this to suit your needs
-    // io_led[0] shows the lowest 8 bit of ALU output at all times
-    // io_led[1] shows the highest 8 bit of ALU output at all times
-    // io_led[2][2:0] shows z,v,n at all times
-    io_led = c{{c{5b0, alu.z, alu.v, alu.n}}, {alu.out[31:24]}, {alu.out[7:0]}};   
+    case (alu_runner.q){
+        alu_runner.SET_A_16:
+          seg.values = {5b01010,5b11101,5b00001,5b00110}; // Display "A-16"
+          if (edge_detector.out[1]){
+            a.d = c{a.q[31:16], io_dip[1], io_dip[0]};
+            alu_runner.d = alu_runner.SET_A_32;
+          }
+          
+        alu_runner.SET_A_32:
+          seg.values = {5b01010,5b11101,5b00011,5b00010}; // Display "A-32"
+          if (edge_detector.out[1]){
+            a.d = c{io_dip[1], io_dip[0], a.q[15:0]};
+          alu_runner.d = alu_runner.SET_B_16;
+          }
+          
+        alu_runner.SET_B_16: 
+          seg.values = {5b01011,5b11101,5b00001,5b00110}; // Display "B-16"
+          if (edge_detector.out[1]){
+            b.d = c{b.q[31:16], io_dip[1], io_dip[0]};
+          alu_runner.d = alu_runner.SET_B_32;
+          }
+          
+        alu_runner.SET_B_32:
+          seg.values = {5b01011,5b11101,5b00011,5b00010}; // Display "B-32"
+          if (edge_detector.out[1]){
+            b.d = c{io_dip[1], io_dip[0], b.q[15:0]};
+          alu_runner.d = alu_runner.SET_ALUFN;
+          }
+          
+        alu_runner.SET_ALUFN:
+          seg.values = {5b01010,5b10001,5b01111,5b10101};  // Display "ALFN"
+          if(edge_detector.out[1]){
+            alufn.d = io_dip[0][5:0];
+          alu_runner.d = alu_runner.RUN;
+          }
+          
+        alu_runner.RUN:
+          r_disp.alufn = alufn.q;
+          seg.values = r_disp.seg_val;
+          if(edge_detector.out[0]){ 
+            alu_runner.d = alu_runner.SET_A_16;              // set A again
+          } 
+          if(edge_detector.out[1]==1 && alufn.q==6b100101){
+            alu.next = 1;                                    // Resets to 0 on next clk cycle (acts as button)
+            alu_runner.d = alu_runner.RUN;                   // Returns to same state when specifically for RNG ALUFN sig
+          } 
+          
+      }
+    io_led = c{{c{5b0, alu.z, alu.v, alu.n}}, {alu.out[31:24]}, {alu.out[7:0]}};
   }
 }
